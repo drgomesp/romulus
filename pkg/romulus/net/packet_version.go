@@ -2,9 +2,10 @@ package net
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"sort"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Version struct {
