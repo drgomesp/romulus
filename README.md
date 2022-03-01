@@ -1,7 +1,6 @@
-# Rhizom
+# ROmulus
 
-The official implementation of the Rhizom blockchain protocol, following the reference
-[specs](https://github.com/drgomesp/blockchain-specs).
+A modern RO server emulator
 
 ---
 
@@ -11,4 +10,4 @@ The official implementation of the Rhizom blockchain protocol, following the ref
 
 ## Introduction
 
-Rhizom is a new blockchain platform for Market Networks.
+
