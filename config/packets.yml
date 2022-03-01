@@ -1,0 +1,35 @@
+20211117:
+  packets:
+    0x0064:
+      packet: CA_LOGIN
+      size: 55
+    0x0065:
+      packet: CH_ENTER
+      size: 17
+#    0x0069:
+#      packet: AC_ACCEPT_LOGIN
+#      size: -1
+    0x0ac4:
+      packet: AC_ACCEPT_LOGIN
+      size: -1
+    0x006b:
+      packet: HC_ACCEPT_ENTER
+      size: -1
+    0x020d:
+      packet: HC_BLOCK_CHARACTER
+      size: -1
+    0x082d:
+      packet: HC_SLOT_INFO
+      size: -1
+    0x08b9:
+      packet: HC_SECOND_PASSWD_LOGIN
+      size: 12
+    0x09a0:
+      packet: HC_CHARLIST_NOTIFY
+      size: 6
+    0x09a1:
+      packet: CH_REQUEST_CHARLIST
+      size: 64
+    0x0187:
+      packet: PING
+      size: 6
