@@ -10,8 +10,8 @@ type PacketRegistry struct {
 	ClientPackets map[string]ClientPacket
 	ServerPackets map[string]ServerPacket
 
-	Incoming map[PacketID]*PacketDefinition
-	Outgoing map[reflect.Type]*PacketDefinition
+	incoming map[PacketID]*PacketDefinition
+	outgoing map[reflect.Type]*PacketDefinition
 }
 
 func NewPacketRegistry(
@@ -23,8 +23,8 @@ func NewPacketRegistry(
 		ClientPackets: clientPackets,
 		ServerPackets: serverPackets,
 
-		Incoming: make(map[PacketID]*PacketDefinition),
-		Outgoing: make(map[reflect.Type]*PacketDefinition),
+		incoming: make(map[PacketID]*PacketDefinition),
+		outgoing: make(map[reflect.Type]*PacketDefinition),
 	}
 
 	pv, found := PacketVersions[int(version)]
@@ -62,16 +62,16 @@ func (d *PacketRegistry) RegisterPacket(name string, id PacketID, size int) {
 		Decoder: decoder,
 	}
 
-	d.Incoming[id] = def
+	d.incoming[id] = def
 
 	if isEncoder {
-		d.Outgoing[reflect.TypeOf(encoder).Elem()] = def
+		d.outgoing[reflect.TypeOf(encoder).Elem()] = def
 	}
 }
 
 func (d *PacketRegistry) Encode(packet ServerPacket) (*PacketDefinition, *PacketData, error) {
 	typ := reflect.TypeOf(packet).Elem()
-	def, ok := d.Outgoing[typ]
+	def, ok := d.outgoing[typ]
 	if !ok {
 		return nil, nil, fmt.Errorf(`unknown server packet "0x%04x"`, typ)
 	}
@@ -100,7 +100,7 @@ func (d *PacketRegistry) Encode(packet ServerPacket) (*PacketDefinition, *Packet
 }
 
 func (d *PacketRegistry) Decode(data *PacketData) (*PacketDefinition, ClientPacket, error) {
-	def, ok := d.Incoming[data.ID]
+	def, ok := d.incoming[data.ID]
 	if !ok {
 		return nil, nil, fmt.Errorf("unknown client packet 0x%04x", data.ID)
 	}
@@ -117,7 +117,7 @@ func (d *PacketRegistry) Decode(data *PacketData) (*PacketDefinition, ClientPack
 }
 
 func (d *PacketRegistry) PacketSize(packetID PacketID) (int, bool) {
-	def, ok := d.Incoming[packetID]
+	def, ok := d.incoming[packetID]
 
 	if !ok {
 		return 0, false

@@ -4,7 +4,7 @@ import (
 	"github.com/drgomesp/rhizom/pkg/romulus/net"
 )
 
-type ClientCharEnter struct {
+type CharEnter struct {
 	AccountID          uint32
 	AuthenticationCode uint32
 	UserLevel          uint32
@@ -12,7 +12,7 @@ type ClientCharEnter struct {
 	Sex                byte
 }
 
-func (r *ClientCharEnter) Decode(p *net.PacketData) error {
+func (r *CharEnter) Decode(p *net.PacketData) error {
 	p.Read(&r.AccountID)
 	p.Read(&r.AuthenticationCode)
 	p.Read(&r.UserLevel)

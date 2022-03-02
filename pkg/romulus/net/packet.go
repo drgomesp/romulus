@@ -23,6 +23,7 @@ type PacketReader interface {
 
 type PacketWriter interface {
 	Send(ServerPacket) error
+	SendRaw(data interface{})
 	Flush() error
 }
 

@@ -5,14 +5,10 @@ import (
 	"github.com/drgomesp/rhizom/pkg/romulus/net"
 )
 
-const (
-	PacketTypeAccountLogin       = net.PacketID(0x0064)
-	PacketTypeAccountLoginAccept = net.PacketID(0x0ac4)
-)
-
 var (
 	clientHandlers = map[net.PacketID]net.PacketHandlerFunc{
-		PacketTypeAccountLogin: handler.HandleAccountLogin,
+		PacketClientAccountLogin: handler.HandleAccountLogin,
+		PacketClientCharEnter:    handler.HandleCharEnter,
 	}
 )
 

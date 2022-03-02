@@ -107,7 +107,19 @@ func (p *protoRW) Send(packet ServerPacket) error {
 		//"packet", packet,
 	)
 
-	return p.conn.Close()
+	return p.writer.Flush()
+}
+
+func (p *protoRW) SendRaw(data interface{}) error {
+	err := binary.Write(p.writer, binary.LittleEndian, data)
+
+	if err != nil {
+		return err
+	}
+
+	p.logger.Debugw("→ packet sent", "data", data)
+
+	return p.writer.Flush()
 }
 
 func (p *protoRW) Flush() error {

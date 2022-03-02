@@ -10,7 +10,7 @@
 #      packet: AC_ACCEPT_LOGIN
 #      size: -1
     0x0ac4:
-      packet: AC_ACCEPT_LOGIN
+      packet: AC_ACCEPT_LOGIN3
       size: -1
     0x006b:
       packet: HC_ACCEPT_ENTER

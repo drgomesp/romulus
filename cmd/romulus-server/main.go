@@ -21,14 +21,14 @@ var app *cli.App
 
 func init() {
 	app = &cli.App{
-		Name: "net-net",
+		Name: "romulus-server",
 		Action: func(c *cli.Context) (err error) {
 			ctx, cancelFunc := context.WithCancel(c.Context)
 			defer cancelFunc()
 
 			accountServer, err := makeAccountServer(ctx)
 			if err != nil {
-				return errors.Wrap(err, "failed to initialize full net")
+				return errors.Wrap(err, "failed to initialize server")
 			}
 			_ = accountServer
 
@@ -50,7 +50,7 @@ func buildLogger() (*zap.Logger, error) {
 
 	logger, err := config.Build()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to initialized logger")
+		return nil, errors.Wrap(err, "failed to initialize logger")
 	}
 
 	return logger, nil
@@ -64,7 +64,7 @@ func makeAccountServer(_ context.Context) (*roserver.Account, error) {
 
 	var accountServer *roserver.Account
 	if accountServer, err = roserver.NewAccountServer(logger.Sugar()); err != nil {
-		return nil, errors.Wrap(err, "failed to initialize net")
+		return nil, errors.Wrap(err, "failed to initialize account server")
 	}
 
 	return accountServer, nil
