@@ -4,9 +4,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"log"
 	"net"
-	"time"
 
 	"go.uber.org/zap"
 
@@ -87,26 +85,23 @@ running:
 		case <-s.quit:
 			break running
 		default:
-			{
-				for _, proto := range s.protocols {
-					conn, err := s.listener.Accept()
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					if err = s.handler(proto.ID, proto.Run)(conn); err != nil {
-						log.Fatal(err)
-					}
-				}
+			conn, err := s.listener.Accept()
+			if err != nil {
+				s.logger.Error(err)
+				continue
 			}
-		case <-time.After(0):
-			{
 
+			for _, proto := range s.protocols {
+				go func(proto *Protocol, conn net.Conn) {
+					if err := s.handler(proto.ID, proto.Run)(conn); err != nil {
+						s.logger.Error(err)
+					}
+				}(proto, conn)
 			}
 		}
 	}
 
-	panic("WTF")
+	return nil
 }
 
 func (s *Server) RegisterProtocols(protocols ...*Protocol) {
@@ -114,18 +109,21 @@ func (s *Server) RegisterProtocols(protocols ...*Protocol) {
 
 	s.handler = func(pid ProtocolID, handler ProtocolHandlerFunc) ConnHandlerFunc {
 		return func(conn net.Conn) error {
+			r, w := bufio.NewReader(conn), bufio.NewWriter(conn)
+
 			rw := &protoRW{
 				logger: s.logger,
 				conn:   conn,
-				reader: bufio.NewReader(conn),
-				writer: bufio.NewWriter(conn),
+				stream: bufio.NewReadWriter(r, w),
 				reg:    s.packetReg,
 			}
 
-			err := handler(rw)
+			if err := handler(rw); err != nil {
+				s.logger.Error(err)
 
-			if err != nil {
-				s.logger.Debugw("RegisterProtocols")
+				if err := conn.Close(); err != nil {
+					s.logger.Error(err)
+				}
 
 				return err
 			}

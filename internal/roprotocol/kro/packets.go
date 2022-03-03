@@ -6,23 +6,26 @@ import (
 )
 
 const (
-	PacketClientPing                    = net.PacketID(0x0187)
-	PacketClientAccountLogin            = net.PacketID(0x0064) // [CA] client > account
-	PacketClientCharEnter               = net.PacketID(0x0065) // [CH] client > char
-	PacketClientCharRequestCharList     = net.PacketID(0x09a1) // [CH] client > char
-	PacketServerAccountAcceptLogin      = net.PacketID(0x0ac4) // [AC] account > client
-	PacketServerCharAcceptEnter         = net.PacketID(0x006b) // [HC] char > client
-	PacketServerCharSlotsInfo           = net.PacketID(0x082d) // [HC] char > client
-	PacketServerCharSecondPasswordLogin = net.PacketID(0x08b9) // [HC] char > client
-	PacketServerCharBlockCharacter      = net.PacketID(0x020d) // [HC] char > client
-	PacketServerCharListNotify          = net.PacketID(0x09a0) // [HC] char > client
+	PacketClientPing                = net.PacketID(0x0187)
+	PacketClientAccountLogin        = net.PacketID(0x0064)
+	PacketClientCharEnter           = net.PacketID(0x0065)
+	PacketClientCharSelectChar      = net.PacketID(0x0066)
+	PacketClientCharRequestCharList = net.PacketID(0x09a1)
+
+	PacketServerAccountAcceptLogin      = net.PacketID(0x0ac4)
+	PacketServerCharAcceptEnter         = net.PacketID(0x006b)
+	PacketServerCharSlotsInfo           = net.PacketID(0x082d)
+	PacketServerCharSecondPasswordLogin = net.PacketID(0x08b9)
+	PacketServerCharBlockCharacter      = net.PacketID(0x020d)
+	PacketServerCharListNotify          = net.PacketID(0x09a0)
 )
 
 var ClientPackets = map[string]net.ClientPacket{
+	"PING":                &packet.Ping{},
 	"CA_LOGIN":            &packet.AccountLogin{},
 	"CH_ENTER":            &packet.CharEnter{},
 	"CH_REQUEST_CHARLIST": &packet.CharRequestCharList{},
-	"PING":                &packet.Ping{},
+	"CH_SELECT_CHAR":      &packet.CharSelectChar{},
 }
 
 var ServerPackets = map[string]net.ServerPacket{

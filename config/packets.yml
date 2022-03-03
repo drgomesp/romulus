@@ -6,6 +6,9 @@
     0x0065:
       packet: CH_ENTER
       size: 17
+    0x0066:
+      packet: CH_SELECT_CHAR
+      size: 3
 #    0x0069:
 #      packet: AC_ACCEPT_LOGIN
 #      size: -1

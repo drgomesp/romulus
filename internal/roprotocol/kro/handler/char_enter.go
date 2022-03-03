@@ -7,20 +7,18 @@ import (
 	"github.com/drgomesp/rhizom/pkg/romulus/net"
 )
 
-func HandleCharEnter(clientPacket net.ClientPacket, sender net.PacketWriter) error {
+func HandleCharEnter(pid net.PacketID, clientPacket net.ClientPacket, sender net.PacketWriter) error {
 	p, ok := clientPacket.(*packet.CharEnter)
 	if !ok {
 		return errors.New("fuk!")
 	}
 
 	err := sender.SendRaw(p.AccountID)
-
 	if err != nil {
 		return err
 	}
 
 	chars := loadCharacters()
-
 	err = sender.Send(&packet.CharSlotsInfo{
 		NormalSlots:     9,
 		PremiumSlots:    0,
@@ -52,7 +50,6 @@ func HandleCharEnter(clientPacket net.ClientPacket, sender net.PacketWriter) err
 		AccountID: p.AccountID,
 		Result:    0,
 	})
-
 	if err != nil {
 		return err
 	}
@@ -60,10 +57,10 @@ func HandleCharEnter(clientPacket net.ClientPacket, sender net.PacketWriter) err
 	err = sender.Send(&packet.CharListNotify{
 		Count: 1,
 	})
-
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

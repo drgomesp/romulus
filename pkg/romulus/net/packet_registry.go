@@ -85,8 +85,7 @@ func (d *PacketRegistry) Encode(packet ServerPacket) (*PacketDefinition, *Packet
 		_ = data.Write(uint16(0))
 	}
 
-	err := packet.Encode(data)
-	if err != nil {
+	if err := packet.Encode(data); err != nil {
 		return nil, nil, err
 	}
 
@@ -103,6 +102,10 @@ func (d *PacketRegistry) Decode(data *PacketData) (*PacketDefinition, ClientPack
 	def, ok := d.incoming[data.ID]
 	if !ok {
 		return nil, nil, fmt.Errorf("unknown client packet 0x%04x", data.ID)
+	}
+
+	if def.Decoder == nil {
+		return nil, nil, fmt.Errorf("unknown decoder for client packet 0x%04x", data.ID)
 	}
 
 	typ := reflect.TypeOf(def.Decoder).Elem()

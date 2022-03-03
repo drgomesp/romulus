@@ -26,13 +26,12 @@ func init() {
 			ctx, cancelFunc := context.WithCancel(c.Context)
 			defer cancelFunc()
 
-			accountServer, err := makeAccountServer(ctx)
+			srv, err := makeServer(ctx)
 			if err != nil {
 				return errors.Wrap(err, "failed to initialize server")
 			}
-			_ = accountServer
 
-			return startServer(ctx, accountServer.Server)
+			return startServer(ctx, srv.Server)
 		},
 	}
 }
@@ -56,18 +55,18 @@ func buildLogger() (*zap.Logger, error) {
 	return logger, nil
 }
 
-func makeAccountServer(_ context.Context) (*roserver.Account, error) {
+func makeServer(_ context.Context) (*roserver.Server, error) {
 	logger, err := buildLogger()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to initialize logger")
 	}
 
-	var accountServer *roserver.Account
-	if accountServer, err = roserver.NewAccountServer(logger.Sugar()); err != nil {
-		return nil, errors.Wrap(err, "failed to initialize account server")
+	var srv *roserver.Server
+	if srv, err = roserver.NewServer(logger.Sugar()); err != nil {
+		return nil, errors.Wrap(err, "failed to initialize server")
 	}
 
-	return accountServer, nil
+	return srv, nil
 }
 
 func startServer(ctx context.Context, srv *net.Server) error {

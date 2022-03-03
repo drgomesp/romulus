@@ -19,12 +19,12 @@ type ServerPacket interface {
 
 type PacketReader interface {
 	ReadPacket() (PacketID, ClientPacket, error)
+	Error(err error) error
 }
 
 type PacketWriter interface {
 	Send(ServerPacket) error
-	SendRaw(data interface{})
-	Flush() error
+	SendRaw(data interface{}) error
 }
 
 type PacketExchange interface {
@@ -32,7 +32,7 @@ type PacketExchange interface {
 	PacketWriter
 }
 
-type PacketHandlerFunc func(ClientPacket, PacketWriter) error
+type PacketHandlerFunc func(PacketID, ClientPacket, PacketWriter) error
 
 type PacketDefinition struct {
 	Name    string

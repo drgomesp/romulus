@@ -9,7 +9,7 @@ import (
 	"github.com/drgomesp/rhizom/pkg/romulus/net"
 )
 
-func HandleAccountLogin(p net.ClientPacket, sender net.PacketWriter) error {
+func HandleAccountLogin(pid net.PacketID, p net.ClientPacket, sender net.PacketWriter) error {
 	p, ok := p.(*packet.AccountLogin)
 	if !ok {
 		return errors.New("fuk!")
